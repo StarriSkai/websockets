@@ -1,9 +1,15 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 import { router as apiRouter } from "./routes/index.js";
 import { notFoundHandler } from "./middleware/notFound.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const clientDist = path.join(__dirname, "../client/dist");
 
 export function createApp() {
   const app = express();
@@ -13,6 +19,16 @@ export function createApp() {
   app.use(morgan("dev"));
 
   app.use("/api", apiRouter);
+
+  if (fs.existsSync(clientDist)) {
+    app.use(express.static(clientDist));
+    app.get("*", (req, res, next) => {
+      if (req.path.startsWith("/api")) return next();
+      res.sendFile(path.join(clientDist, "index.html"), (err) => {
+        if (err) next(err);
+      });
+    });
+  }
 
   app.use(notFoundHandler);
   app.use(errorHandler);

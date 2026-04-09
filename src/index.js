@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { createApp } from "./app.js";
 import { connectDb, disconnectDb } from "./db.js";
+import { attachChatServer } from "./chatSocket.js";
 
 const port = Number(process.env.PORT) || 3000;
 
@@ -12,6 +13,9 @@ async function main() {
   const server = app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`);
   });
+
+  attachChatServer(server);
+  console.log("WebSocket chat at /ws");
 
   const shutdown = async (signal) => {
     console.log(`${signal} received, shutting down`);

@@ -8,13 +8,20 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev": "node --watch src/index.js",
+    "dev:client": "npm run dev --prefix client",
+    "dev:all": "concurrently -n api,web -c blue,magenta \"npm run dev\" \"npm run dev --prefix client\"",
+    "build:client": "npm run build --prefix client"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.9.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }
