@@ -7,11 +7,11 @@ const port = Number(process.env.PORT) || 3000;
 
 async function main() {
   await connectDb();
-  console.log("Connected to MongoDB");
 
   const app = createApp();
-  const server = app.listen(port, () => {
-    console.log(`Server listening on http://localhost:${port}`);
+  const host = "0.0.0.0";
+  const server = app.listen(port, host, () => {
+    console.log(`Server listening on http://${host}:${port}`);
   });
 
   attachChatServer(server);
