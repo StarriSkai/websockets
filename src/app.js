@@ -9,7 +9,7 @@ import { notFoundHandler } from "./middleware/notFound.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const clientDist = path.join(__dirname, "../client/dist");
+const clientBuild = path.join(__dirname, "../client/build");
 
 export function createApp() {
   const app = express();
@@ -20,11 +20,11 @@ export function createApp() {
 
   app.use("/api", apiRouter);
 
-  if (fs.existsSync(clientDist)) {
-    app.use(express.static(clientDist));
+  if (fs.existsSync(clientBuild)) {
+    app.use(express.static(clientBuild));
     app.get("*", (req, res, next) => {
       if (req.path.startsWith("/api")) return next();
-      res.sendFile(path.join(clientDist, "index.html"), (err) => {
+      res.sendFile(path.join(clientBuild, "index.html"), (err) => {
         if (err) next(err);
       });
     });

@@ -5,13 +5,13 @@ import { spawnSync } from "child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-const marker = path.join(root, "client", "dist", "index.html");
+const marker = path.join(root, "client", "build", "index.html");
 
 if (fs.existsSync(marker)) {
   process.exit(0);
 }
 
-console.error("client/dist missing — building client for production…");
+console.error("client/build missing — building client for production…");
 const result = spawnSync("npm", ["run", "build:client"], {
   cwd: root,
   stdio: "inherit",

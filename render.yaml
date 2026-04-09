@@ -1,4 +1,5 @@
 # https://render.com/docs/blueprint-spec
+# Vite outputs the React app to client/build. If you add a Render Static Site, set Publish Directory to: client/build
 services:
   - type: web
     name: websockets
