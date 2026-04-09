@@ -1,12 +1,14 @@
 # https://render.com/docs/blueprint-spec
-# Vite outputs the React app to client/build. If you add a Render Static Site, set Publish Directory to: client/build
+# Root Directory = client (Render dashboard or rootDir below). Build/start cd to repo root so the API + monorepo install run correctly.
+# Vite output: client/build. For a separate Render Static Site with root client only: Publish Directory = build
 services:
   - type: web
     name: websockets
     runtime: node
     plan: free
-    buildCommand: npm install && npm run build:client
-    startCommand: npm start
+    rootDir: client
+    buildCommand: cd .. && npm install && npm run build:client
+    startCommand: cd .. && npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
