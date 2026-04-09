@@ -2,6 +2,7 @@
 # API uses rootDir: server (backend only). Keep SKIP_CLIENT_BUILD=1 on API — Render does not expose repo files outside server/ to that service.
 #
 # Common deploy failures:
+# - Start command "npm run start" from REPO ROOT: root package.json now runs `prestart` → `npm install --prefix server` so dotenv/express exist under server/node_modules.
 # - Static: wrong publish folder → use staticPublishPath relative to REPO ROOT (./client/build).
 # - Static with rootDir: only files under that folder exist at build; we build from repo root instead.
 # - API: set MONGODB_URI in the dashboard (optional; app starts without DB).
