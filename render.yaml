@@ -1,19 +1,30 @@
-# https://render.com/docs/blueprint-spec
-# Root Directory = client (Render dashboard or rootDir below). Build/start cd to repo root so the API + monorepo install run correctly.
-# Vite output: client/build. For a separate Render Static Site with root client only: Publish Directory = build
+# Static UI + Node API/WebSocket (two services).
+# 1) Deploy API first, copy its URL (e.g. https://websockets-api.onrender.com).
+# 2) On the static service, set VITE_API_BASE to that URL (no trailing slash) and redeploy.
 services:
   - type: web
-    name: websockets
+    name: websockets-api
     runtime: node
     plan: free
-    rootDir: client
-    buildCommand: cd .. && npm install && npm run build:client
-    startCommand: cd .. && npm start
+    buildCommand: npm install
+    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
       - key: NODE_VERSION
         value: "20"
+      - key: SKIP_CLIENT_BUILD
+        value: "1"
       - key: MONGODB_URI
+        sync: false
+
+  - type: web
+    name: websockets-web
+    runtime: static
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: VITE_API_BASE
         sync: false

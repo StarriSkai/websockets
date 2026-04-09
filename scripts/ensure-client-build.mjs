@@ -3,6 +3,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { spawnSync } from "child_process";
 
+if (process.env.SKIP_CLIENT_BUILD === "1") {
+  process.exit(0);
+}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const marker = path.join(root, "client", "build", "index.html");

@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
-function wsUrl() {
-  const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
-  return `${proto}//${window.location.host}/ws`;
-}
+import { healthUrl, wsUrl } from "./apiConfig.js";
 
 function formatTime(ts) {
   try {
@@ -29,7 +25,7 @@ export default function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/health")
+    fetch(healthUrl())
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((j) => setApiOk(!!j?.ok))
       .catch(() => setApiOk(false));
@@ -55,7 +51,9 @@ export default function App() {
     };
 
     ws.onerror = () => {
-      setError("WebSocket error — is the API running on port 3000?");
+      setError(
+        "WebSocket error — run the API locally or set VITE_API_BASE on the static build.",
+      );
     };
 
     ws.onmessage = (ev) => {
@@ -130,7 +128,7 @@ export default function App() {
           />
           API {apiOk === true ? "up" : apiOk === false ? "down" : "…"}
         </div>
-        <div className="badge" title="WebSocket to same host">
+        <div className="badge" title="WebSocket (API host when using VITE_API_BASE)">
           <span
             className={`badge-dot ${wsState === "open" ? "ok" : wsState === "connecting" ? "warn" : "bad"}`}
           />
@@ -178,7 +176,10 @@ export default function App() {
 
         {!joined ? (
           <form className="composer" onSubmit={sendJoin}>
-            <p className="hint">Pick a display name to enter the room (same server as /api).</p>
+            <p className="hint">
+              Pick a display name to enter the room. Static deploys use your API URL via
+              VITE_API_BASE.
+            </p>
             <div className="form-row">
               <input
                 type="text"
