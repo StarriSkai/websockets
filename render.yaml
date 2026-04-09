@@ -1,6 +1,11 @@
-# Static UI + Node API/WebSocket (two services).
-# 1) Deploy API first, copy its URL (e.g. https://websockets-api.onrender.com).
-# 2) On the static service, set VITE_API_BASE to that URL (no trailing slash) and redeploy.
+# Two services: Node API + static CDN UI.
+#
+# Common deploy failures:
+# - Static: wrong publish folder → use staticPublishPath relative to REPO ROOT (./client/build).
+# - Static with rootDir: only files under that folder exist at build; we build from repo root instead.
+# - API: set MONGODB_URI in the dashboard (optional; app starts without DB).
+# - VITE_API_BASE: set on the static service to your API URL, then redeploy static.
+# - If blueprint rejects plan: free, remove the plan line or pick Starter in the dashboard.
 services:
   - type: web
     name: websockets-api
@@ -22,9 +27,10 @@ services:
   - type: web
     name: websockets-web
     runtime: static
-    rootDir: client
-    buildCommand: npm install && npm run build
-    staticPublishPath: build
+    buildCommand: npm install --prefix client && npm run build --prefix client
+    staticPublishPath: ./client/build
     envVars:
+      - key: NODE_VERSION
+        value: "20"
       - key: VITE_API_BASE
         sync: false
