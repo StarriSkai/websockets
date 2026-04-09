@@ -8,8 +8,8 @@ if (process.env.SKIP_CLIENT_BUILD === "1") {
 }
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, "..");
-const marker = path.join(root, "client", "build", "index.html");
+const repoRoot = path.join(__dirname, "..", "..");
+const marker = path.join(repoRoot, "client", "build", "index.html");
 
 if (fs.existsSync(marker)) {
   process.exit(0);
@@ -17,7 +17,7 @@ if (fs.existsSync(marker)) {
 
 console.error("client/build missing — building client for production…");
 const result = spawnSync("npm", ["run", "build:client"], {
-  cwd: root,
+  cwd: repoRoot,
   stdio: "inherit",
   shell: true,
 });

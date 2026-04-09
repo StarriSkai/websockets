@@ -1,4 +1,5 @@
 # Two services: Node API + static CDN UI.
+# API uses rootDir: server (backend only). Keep SKIP_CLIENT_BUILD=1 on API — Render does not expose repo files outside server/ to that service.
 #
 # Common deploy failures:
 # - Static: wrong publish folder → use staticPublishPath relative to REPO ROOT (./client/build).
@@ -11,6 +12,7 @@ services:
     name: websockets-api
     runtime: node
     plan: free
+    rootDir: server
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health

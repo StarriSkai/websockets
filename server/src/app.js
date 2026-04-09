@@ -9,7 +9,7 @@ import { notFoundHandler } from "./middleware/notFound.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const clientBuild = path.join(__dirname, "../client/build");
+const clientBuild = path.join(__dirname, "../../client/build");
 
 export function createApp() {
   const app = express();
